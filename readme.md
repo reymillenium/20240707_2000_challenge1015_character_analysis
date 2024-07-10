@@ -1,8 +1,8 @@
 # COP 1334 Assignment - Introduction to C++
 
-## Chapter 6: Challenge 10
+## Chapter 10: Challenge 15
 
-## Title: Future Value
+## Title: Character Analysis
 
 ### Exercise Description:
 

@@ -1,31 +1,19 @@
 /**
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *                                                       *
- *       Created by: Reinier Garcia Ramos                *
- *       reymillenium@gmail.com                          *
- *                                                       *
- *       https://www.linkedin.com/in/reiniergarcia       *
- *       https://github.com/reymillenium                 *
- *       https://www.reiniergarcia.dev                   *
- *                                                       *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- **/
-
-/**
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *                                                                     *
- *   Name: 07-Arrays-intro                                             *
- *                                                                     *
- *   Purpose:                                                          *
- *   Receives 10 integers provided by the user from the console,       *
- *   and stores them in an array. And then based on them, it           *
- *   calculates the sum, the average and the largest element.          *
- *                                                                     *
- *   More Details:                                                     *
- *   https://github.com/reymillenium/20240621_0127_arrays_intro        *
- *                                                                     *
- *                                                                     *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *                                                                                     *
+ *   Name: Reinier Garcia Ramos                                                        *
+ *                                                                                     *
+ *   Program Title: Character Analysis                                                 *
+ *                                                                                     *
+ *   Purpose:                                                                          *
+ *   Reads a .txt file and determines the amount of digits, uppercase and lowercase    *
+ *   letters on it. It also dtermines the same from a constant string object.          *
+ *                                                                                     *
+ *   More Details:                                                                     *
+ *   https://github.com/reymillenium/20240707_2000_challenge1015_character_analysis    *
+ *                                                                                     *
+ *                                                                                     *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  **/
 
 #include <iostream>
@@ -45,6 +33,7 @@
 #include <algorithm> // For max_element, min_element, find, transform (to use in vectors), or for max(), reverse
 #include <regex> // For regex, regex_match
 #include <cstring> // For strrev
+#include <filesystem> // for files handling
 
 using std::cout;
 using std::endl;
@@ -65,6 +54,9 @@ using std::regex_search;
 using std::stoi;
 using std::stod;
 using std::isalpha;
+using std::count_if;
+
+// UTILITY FUNCTIONS PROTOTYPES
 
 // Prints a given value, of almost any kind, once in the terminal
 template<typename T>
@@ -238,48 +230,70 @@ string getSecondsFromDateTime(const string &);
 // Function to convert from a military Time (24 hours format) to civilian Time (12 hours format with meridian)
 string convertTimeToCivilian(int, int);
 
-// CUSTOM FUNCTIONS
+// Detects if a given filename exist or not on the root of the executable file
+bool fileExist(const string &);
 
-template<int N>
-void loadRainfalls(const vector<string> &, double (&)[N]);
+// Gets all the non-empty lines of text inside a given file name
+vector<string> getLinesFromFile(const string &);
 
-template<int N>
-void loadRainfallsPlus(const vector<string> &, double (&)[N]);
 
-// template<size_t a, size_t b>
-template<int N, int M>
-void loadMonkeysFoodArray(const vector<string> &, double (&)[N][M]);
+// CUSTOM MADE FUNCTIONS PROTOTYPES
 
-template<int N, int M>
-void loadMonkeysFoodArraySlim(const vector<string> &, double (&)[N][M]);
+// Shows the program's welcoming message
+void showProgramWelcome();
 
-string getLeastRainfallMonth(const vector<string> &, double [], int);
+// Shows the menu to the user
+void showMenu(bool = false);
 
-string getMostRainfallMonth(const vector<string> &, double [], int);
+// Analyses a constant string object and reports the amount of digits, as well as uppercase & lowercase letters
+void analyseSimpleStringObject();
 
-void displayResults(double, double, double);
+// Either creates a .txt file and adds text to it, or adds to an existent one
+void addTextToFile(const string &);
 
-// class MonthlyRainLog {
-// public:
-//     string monthName;
-//     double rainAmount;
-//
-//     // dummy constructor
-//     MonthlyRainLog() {
-//     }
-//
-//     // Parameterized constructor
-//     MonthlyRainLog(const string &aMonthName, const double &aRainAmount) {
-//         monthName = aMonthName;
-//         rainAmount = aRainAmount;
-//     }
-// };
+// Analyses a given file name and reports the amount of digits, as well as uppercase & lowercase letters
+void analyseOurTextFile(const string &);
+
+// Displays the results to the user on the terminal
+void displayResults(int, int, int, const string & = "string");
+
+// Processes the selection made by the user, based on the options of the menu
+void processSelection(int selection, bool, const string &);
 
 // Main Function
 int main() {
-    cout << "Hello, World!" << endl;
+    const string FILE_NAME = "text.txt"; // The name of the file to save text
+    bool theFileExists = false; // If the file with text was already saved in the root of the executable
+    int menuSelectedOption = 0; // The selection made by the user from the options of the menu
+    int quittingOption = 3; // The option number on the menu that allows to quit the program
+
+    // Shows the program's welcoming message
+    showProgramWelcome();
+
+    do {
+        // Detects if the text file already exist
+        theFileExists = fileExist(FILE_NAME);
+
+        // Adjusts the quitting option number, based in the existence or not of the text file
+        quittingOption = theFileExists ? 4 : 3;
+
+        // Shows the menu with some options to the user
+        showMenu(theFileExists);
+
+        // Gets the selected menu option from the user
+        menuSelectedOption = getInteger("Type your selection please", 1, quittingOption);
+
+        // Processes the selection made by the user
+        processSelection(menuSelectedOption, theFileExists, FILE_NAME);
+    } while (menuSelectedOption != quittingOption);
+
+
     return 0;
 }
+
+
+// UTILITY FUNCTIONS DEFINITIONS
+
 
 // Prints a given value, of almost any kind, once in the terminal
 template<typename T>
@@ -837,72 +851,134 @@ string convertTimeToCivilian(const int militaryHours, const int minutes) {
     return to_string(civilianHours) + ":" + (minutes < 10 ? "0" : "") + to_string(minutes) + " " + meridian;
 }
 
+// Detects if a given filename exist or not on the root of the executable file
+bool fileExist(const string &fileName) {
+    bool theFileExist = false; // If the file with text was already saved in the root of the executable
 
-// CUSTOM FUNCTIONS
+    if (std::filesystem::exists(fileName))
+        theFileExist = true;
 
-
-template<int N>
-void loadRainfalls(const vector<string> &months, double (&rainfalls)[N]) {
-    const int arraySize = sizeof(rainfalls) / sizeof(rainfalls[0]);
-    for (int i = 0; i < arraySize; i++) {
-        rainfalls[i] = getDouble("Enter rainfall for " + months[i], 0, INT_MAX, false, "invalid data (negative rainfall) -- retry");
-    }
+    return theFileExist;
 }
 
-template<int N>
-void loadRainfallsPlus(const vector<string> &months, double (&rainfalls)[N]) {
-    int count {0};
-    for (double &rainfall: rainfalls) {
-        rainfall = getDouble("Enter rainfall for " + months[count], 0, INT_MAX, false, "invalid data (negative rainfall) -- retry");
-        count++;
-    }
-}
+// Gets all the non-empty lines of text inside a given file name
+vector<string> getLinesFromFile(const string &fileName) {
+    std::ifstream inputFile(fileName);
+    vector<string> lines;
 
-// template<size_t a, size_t b>
-template<int N, int M>
-void loadMonkeysFoodArray(const vector<string> &weekDays, double (&monkeysFood)[N][M]) {
-    const int rows = sizeof(monkeysFood) / sizeof(monkeysFood[0]);
-    const int columns = sizeof(monkeysFood[0]) / sizeof(monkeysFood[0][0]);
+    if (inputFile.is_open()) {
+        string line; // one single line at the time, to be read from the file
 
-    for (int row = 0; row < rows; row++) {
-        for (int col = 0; col < columns; col++) {
-            monkeysFood[row][col] = getDouble("Please type how many pounds of food the " + ordinalFromNumber(row + 1) + " monkey will eat on " + weekDays[col], 0, INT_MAX);
+        while (getline(inputFile, line)) {
+            if (!line.empty()) // If the line is empty then it's not interesting for us
+                lines.push_back(line);
         }
+    } else {
+        std::cerr << "Error opening file\n";
     }
+
+    // Closing the input file
+    inputFile.close();
+
+    return lines;
 }
 
-template<int N, int M>
-void loadMonkeysFoodArraySlim(const vector<string> &weekDays, double (&monkeysFood)[N][M]) {
-    int rowIndex = 0;
+// CUSTOM MADE FUNCTIONS DEFINITIONS
 
-    for (auto &row: monkeysFood) {
-        int cellIndex = 0;
 
-        for (auto &cell: row) {
-            cell = getDouble("Please type how many pounds of food the " + ordinalFromNumber(rowIndex + 1) + " monkey will eat on " + weekDays[cellIndex], 0, INT_MAX);
-            cellIndex++;
-        }
-        rowIndex++;
-    }
-}
-
-string getLeastRainfallMonth(const vector<string> &months, double rainfalls[], const int arraySize) {
-    const double *targetPointer = find(&rainfalls[0], rainfalls + arraySize, simpleLowerDoubleInArray(rainfalls, arraySize));
-    const int targetIndex = targetPointer - rainfalls;
-    string leastRainfallMonth = months[targetIndex];
-    return leastRainfallMonth;
-}
-
-string getMostRainfallMonth(const vector<string> &months, double rainfalls[], const int arraySize) {
-    const double *targetPointer = find(&rainfalls[0], rainfalls + arraySize, simpleHigherDoubleInArray(rainfalls, arraySize));
-    const int targetIndex = targetPointer - rainfalls;
-    string mostRainfallMonth = months[targetIndex];
-    return mostRainfallMonth;
-}
-
-void displayResults(const double average, const double lowerAmount, const double higherAmount) {
+// Shows the program's welcoming message
+void showProgramWelcome() {
     cout << endl;
-    cout << "The average amount of food eaten per day by the whole family of monkeys is " << humanizeDouble(average) << " lbs." << endl;
-    cout << "The least amount of food eaten during the week by any one monkey is " << humanizeDouble(lowerAmount) << " lbs." << endl;
-    cout << "The greatest amount of food eaten during the week by any one monkey is " << humanizeDouble(higherAmount) << " lbs." << endl;
+    cout << "Welcome to Character Analysis Pro" << endl;
+}
+
+// Shows the menu to the user
+void showMenu(const bool fileExists) {
+    cout << endl;
+    cout << "1. Simple & boring character analysis from a string object." << endl;
+    cout << "2. " << (fileExists ? "Add more" : "Save some") << " text to" << (fileExists ? " our" : " a") << " file, so we can analyse it later." << endl;
+    if (fileExists)
+        cout << "3. Fun Y Cool Character Analysis of our text file." << endl;
+    cout << (fileExists ? 4 : 3) << ". Quit the program." << endl;
+    cout << endl;
+}
+
+// Analyses a constant string object and reports the amount of digits, as well as uppercase & lowercase letters
+void analyseSimpleStringObject() {
+    const string simpleTextToAnalyse = "The quick Brown Fox jumps over the 23 lazy dogs.";
+    int upperCaseLettersAmount = 0; // The amount of uppercase letters in the string
+    int lowerCaseLettersAmount = 0; // The amount of lowercase letters in the string
+    int digitsAmount = 0; // The amount of digits in the string
+
+    upperCaseLettersAmount = count_if(simpleTextToAnalyse.begin(), simpleTextToAnalyse.end(),
+                                      [](const unsigned char ch) { return isalpha(ch) && isupper(ch); });
+    lowerCaseLettersAmount = count_if(simpleTextToAnalyse.begin(), simpleTextToAnalyse.end(),
+                                      [](const unsigned char ch) { return isalpha(ch) && islower(ch); });
+    digitsAmount = count_if(simpleTextToAnalyse.begin(), simpleTextToAnalyse.end(),
+                            [](const unsigned char ch) { return isdigit(ch); });
+
+    displayResults(upperCaseLettersAmount, lowerCaseLettersAmount, digitsAmount);
+}
+
+// Either creates a .txt file and adds text to it, or adds to an existent one
+void addTextToFile(const string &fileName) {
+    // Opens the input file & keeps the existing data (opens in append mode)
+    std::ofstream outputFile(fileName, std::ios_base::app);
+    string textLine; // To temporally store a single line of text, to be saved/added later to the .txt file
+
+    if (outputFile.is_open()) {
+        // We get a single line of text from the user
+        textLine = getStringFromMessage("Write a single line of text please: ");
+        if (!textLine.empty())
+            outputFile << textLine << endl;
+    } else {
+        std::cerr << "Error opening file\n";
+    }
+
+    // Closing the output file
+    outputFile.close();
+}
+
+// Analyses a given file name and reports the amount of digits, as well as uppercase & lowercase letters
+void analyseOurTextFile(const string &fileName) {
+    int upperCaseLettersAmount = 0; // The amount of uppercase letters in the string
+    int lowerCaseLettersAmount = 0; // The amount of lowercase letters in the string
+    int digitsAmount = 0; // The amount of digits in the string
+
+    vector<string> textLinesFromFile = getLinesFromFile(fileName);
+    for (string line: textLinesFromFile) {
+        upperCaseLettersAmount += count_if(line.begin(), line.end(),
+                                           [](const unsigned char ch) { return isalpha(ch) && isupper(ch); });
+        lowerCaseLettersAmount += count_if(line.begin(), line.end(),
+                                           [](const unsigned char ch) { return isalpha(ch) && islower(ch); });
+        digitsAmount += count_if(line.begin(), line.end(),
+                                 [](const unsigned char ch) { return isdigit(ch); });
+    }
+
+    displayResults(upperCaseLettersAmount, lowerCaseLettersAmount, digitsAmount, "file");
+}
+
+// Displays the results to the user on the terminal
+void displayResults(const int upperCaseLettersAmount, const int lowerCaseLettersAmount, const int digitsAmount, const string &source) {
+    cout << "" << endl;
+    cout << "Character Analysis Results:" << endl;
+    cout << "The " << source << " contains " << digitsAmount << " digits, " << upperCaseLettersAmount << " uppercase letters & " << lowerCaseLettersAmount << " lowercase letters." << endl;
+}
+
+// Processes the selection made by the user, based on the options of the menu
+void processSelection(const int selection, const bool fileExist, const string &fileName) {
+    switch (selection) {
+        case 1:
+            analyseSimpleStringObject();
+            break;
+        case 2:
+            addTextToFile(fileName);
+            break;
+        case 3:
+            if (fileExist)
+                analyseOurTextFile(fileName);
+            break;
+        default:
+            break;
+    }
 }
