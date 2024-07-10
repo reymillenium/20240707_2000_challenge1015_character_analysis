@@ -12,28 +12,16 @@
  *   More Details:                                                                     *
  *   https://github.com/reymillenium/20240707_2000_challenge1015_character_analysis    *
  *                                                                                     *
- *                                                                                     *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  **/
 
 #include <iostream>
-#include <string>  // for string, to_string, etc
-#include <cmath> // for sqrt, sin, pow
-#include <climits> // For SHRT_MAX, SHRT_MIN, etc
-#include <limits> // For SHRT_MAX, SHRT_MIN, etc
-#include <iomanip> // for setprecision, setw, fixed
-#include<array>  // for array
-#include<random> // for random_device
-#include <cstdlib> // For rand and srand
-#include <ctime>   // For the time function
-#include <sstream> // for stringstream (used in humanizeInteger, humanizeDouble, etc)
-#include <vector> // to use vectors
-#include <fstream> // For ifstream, ofstrea, fstream
-#include <numeric> // For accumulate, transform_reduce, inner_product (in the vectors)
-#include <algorithm> // For max_element, min_element, find, transform (to use in vectors), or for max(), reverse
-#include <regex> // For regex, regex_match
-#include <cstring> // For strrev
-#include <filesystem> // for files handling
+#include <string>
+#include <vector>
+#include <fstream>
+#include <algorithm>
+#include <regex>
+#include <filesystem>
 
 using std::cout;
 using std::endl;
@@ -74,7 +62,7 @@ bool fileExist(const string &);
 // Gets all the non-empty lines of text inside a given file name
 vector<string> getLinesFromFile(const string &);
 
-// Either creates a .txt file and adds text to it, or adds to an existent one
+// Either creates a .txt file and adds a single line of text to it, or adds it to an existent one
 void addTextToFile(const string &);
 
 
@@ -216,16 +204,16 @@ vector<string> getLinesFromFile(const string &fileName) {
     return lines;
 }
 
-// Either creates a .txt file and adds text to it, or adds to an existent one
+// Either creates a .txt file and adds a single line of text to it, or adds it to an existent one
 void addTextToFile(const string &fileName) {
     // Opens the input file & keeps the existing data (opens in append mode)
     ofstream outputFile(fileName, ios_base::app);
-    string textLine; // To temporally store a single line of text, to be saved/added later to the .txt file
+    // string textLine;
 
     if (outputFile.is_open()) {
-        // We get a single line of text from the user
-        textLine = getStringFromMessage("Write a single line of text please: ");
-        if (!textLine.empty())
+        // We temporally store a single line of text, to be saved/added later to the .txt file
+        const string textLine = getStringFromMessage("Write a single line of text please: ");
+        if (!textLine.empty()) // There is no point on adding an empty string
             outputFile << textLine << endl;
     } else {
         cerr << "Error opening file\n";
