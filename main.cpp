@@ -38,23 +38,19 @@
 using std::cout;
 using std::endl;
 using std::cin;
-using std::fixed;
-using std::setprecision;
-using std::setw;
-using std::setfill;
+using std::cerr;
 using std::string;
 using std::to_string;
-using std::stringstream;
-using std::accumulate;
 using std::vector;
-using std::find;
 using std::regex;
 using std::regex_match;
-using std::regex_search;
 using std::stoi;
-using std::stod;
 using std::isalpha;
 using std::count_if;
+using std::filesystem::exists;
+using std::ifstream;
+using std::ofstream;
+using std::ios_base;
 
 
 // UTILITY FUNCTIONS PROTOTYPES
@@ -179,7 +175,7 @@ string getStringFromMessage(const string &message) {
 bool fileExist(const string &fileName) {
     bool theFileExist = false; // If the file with text was already saved in the root of the executable
 
-    if (std::filesystem::exists(fileName))
+    if (exists(fileName))
         theFileExist = true;
 
     return theFileExist;
@@ -187,7 +183,7 @@ bool fileExist(const string &fileName) {
 
 // Gets all the non-empty lines of text inside a given file name
 vector<string> getLinesFromFile(const string &fileName) {
-    std::ifstream inputFile(fileName);
+    ifstream inputFile(fileName);
     vector<string> lines;
 
     if (inputFile.is_open()) {
@@ -198,7 +194,7 @@ vector<string> getLinesFromFile(const string &fileName) {
                 lines.push_back(line);
         }
     } else {
-        std::cerr << "Error opening file\n";
+        cerr << "Error opening file\n";
     }
 
     // Closing the input file
@@ -210,7 +206,7 @@ vector<string> getLinesFromFile(const string &fileName) {
 // Either creates a .txt file and adds text to it, or adds to an existent one
 void addTextToFile(const string &fileName) {
     // Opens the input file & keeps the existing data (opens in append mode)
-    std::ofstream outputFile(fileName, std::ios_base::app);
+    ofstream outputFile(fileName, ios_base::app);
     string textLine; // To temporally store a single line of text, to be saved/added later to the .txt file
 
     if (outputFile.is_open()) {
@@ -219,7 +215,7 @@ void addTextToFile(const string &fileName) {
         if (!textLine.empty())
             outputFile << textLine << endl;
     } else {
-        std::cerr << "Error opening file\n";
+        cerr << "Error opening file\n";
     }
 
     // Closing the output file
@@ -254,10 +250,11 @@ void analyseSimpleStringObject() {
     int lowerCaseLettersAmount = 0; // The amount of lowercase letters in the string
     int digitsAmount = 0; // The amount of digits in the string
 
+    // Then we determine each one of our counters
     upperCaseLettersAmount = count_if(simpleTextToAnalyse.begin(), simpleTextToAnalyse.end(),
-                                      [](const unsigned char ch) { return isalpha(ch) && isupper(ch); });
+                                      [](const unsigned char ch) { return isupper(ch); });
     lowerCaseLettersAmount = count_if(simpleTextToAnalyse.begin(), simpleTextToAnalyse.end(),
-                                      [](const unsigned char ch) { return isalpha(ch) && islower(ch); });
+                                      [](const unsigned char ch) { return islower(ch); });
     digitsAmount = count_if(simpleTextToAnalyse.begin(), simpleTextToAnalyse.end(),
                             [](const unsigned char ch) { return isdigit(ch); });
 
@@ -270,13 +267,16 @@ void analyseOurTextFile(const string &fileName) {
     int lowerCaseLettersAmount = 0; // The amount of lowercase letters in the string
     int digitsAmount = 0; // The amount of digits in the string
 
-    vector<string> textLinesFromFile = getLinesFromFile(fileName);
-    for (string line: textLinesFromFile) {
-        upperCaseLettersAmount += count_if(line.begin(), line.end(),
-                                           [](const unsigned char ch) { return isalpha(ch) && isupper(ch); });
-        lowerCaseLettersAmount += count_if(line.begin(), line.end(),
-                                           [](const unsigned char ch) { return isalpha(ch) && islower(ch); });
-        digitsAmount += count_if(line.begin(), line.end(),
+    // We get all the non-empty lines of text from the file
+    const vector<string> textLinesFromFile = getLinesFromFile(fileName);
+
+    // And now we increment each one of our counters on each loop, based on each line of text
+    for (string textLine: textLinesFromFile) {
+        upperCaseLettersAmount += count_if(textLine.begin(), textLine.end(),
+                                           [](const unsigned char ch) { return isupper(ch); });
+        lowerCaseLettersAmount += count_if(textLine.begin(), textLine.end(),
+                                           [](const unsigned char ch) { return islower(ch); });
+        digitsAmount += count_if(textLine.begin(), textLine.end(),
                                  [](const unsigned char ch) { return isdigit(ch); });
     }
 
