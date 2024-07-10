@@ -208,7 +208,6 @@ vector<string> getLinesFromFile(const string &fileName) {
 void addTextToFile(const string &fileName) {
     // Opens the input file & keeps the existing data (opens in append mode)
     ofstream outputFile(fileName, ios_base::app);
-    // string textLine;
 
     if (outputFile.is_open()) {
         // We temporally store a single line of text, to be saved/added later to the .txt file
