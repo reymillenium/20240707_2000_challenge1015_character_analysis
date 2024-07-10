@@ -65,6 +65,9 @@ int getInteger(const string &, int, int, bool = false, const string & = "Invalid
 // Gets a string with or without spaces, from the terminal, as a response of a given question
 string getStringFromMessage(const string &);
 
+// Formats a given positive int by inserting a comma every 3 digits of its equivalent string, to make it more readable, by US standards
+string humanizeUnsignedInteger(unsigned long long int);
+
 // Detects if a given filename exist or not on the root of the executable file
 bool fileExist(const string &);
 
@@ -91,7 +94,7 @@ void analyseSimpleStringObject();
 void analyseOurTextFile(const string &);
 
 // Displays the results to the user on the terminal
-void displayResults(int, int, int, const string & = "string");
+void displayResults(long int, long int, long int, const string & = "string");
 
 // Processes the selection made by the user, based on the options of the menu
 void processSelection(int selection, bool, const string &);
@@ -122,7 +125,6 @@ int main() {
         // Processes the selection made by the user
         processSelection(menuSelectedOption, theFileExists, FILE_NAME);
     } while (menuSelectedOption != quittingOption);
-
 
     return 0;
 }
@@ -169,6 +171,17 @@ string getStringFromMessage(const string &message) {
     string value;
     getline(cin, value);
     return value;
+}
+
+// Formats a given positive int by inserting a comma every 3 digits of its equivalent string, to make it more readable, by US standards
+string humanizeUnsignedInteger(const unsigned long long int integerValue) {
+    string integerAsString = to_string(integerValue);
+    const int initialIndex = (integerAsString.length() - 3);
+    // We insert commas into the string every three digits, fromm right to left.
+    for (int j = initialIndex; j > 0; j -= 3) {
+        integerAsString.insert(j, ",");
+    }
+    return integerAsString;
 }
 
 // Detects if a given filename exist or not on the root of the executable file
@@ -263,9 +276,9 @@ void analyseSimpleStringObject() {
 
 // Analyses a given file name and reports the amount of digits, as well as uppercase & lowercase letters
 void analyseOurTextFile(const string &fileName) {
-    int upperCaseLettersAmount = 0; // The amount of uppercase letters in the string
-    int lowerCaseLettersAmount = 0; // The amount of lowercase letters in the string
-    int digitsAmount = 0; // The amount of digits in the string
+    long int upperCaseLettersAmount = 0; // The amount of uppercase letters in the string
+    long int lowerCaseLettersAmount = 0; // The amount of lowercase letters in the string
+    long int digitsAmount = 0; // The amount of digits in the string
 
     // We get all the non-empty lines of text from the file
     const vector<string> textLinesFromFile = getLinesFromFile(fileName);
@@ -284,10 +297,12 @@ void analyseOurTextFile(const string &fileName) {
 }
 
 // Displays the results to the user on the terminal
-void displayResults(const int upperCaseLettersAmount, const int lowerCaseLettersAmount, const int digitsAmount, const string &source) {
+void displayResults(const long int upperCaseLettersAmount, const long int lowerCaseLettersAmount, const long int digitsAmount, const string &source) {
     cout << "" << endl;
     cout << "Character Analysis Results:" << endl;
-    cout << "The " << source << " contains " << digitsAmount << " digits, " << upperCaseLettersAmount << " uppercase letters & " << lowerCaseLettersAmount << " lowercase letters." << endl;
+    cout << "The " << source << " contains " << humanizeUnsignedInteger(digitsAmount) << " digits, ";
+    cout << humanizeUnsignedInteger(upperCaseLettersAmount) << " uppercase letters & ";
+    cout << humanizeUnsignedInteger(lowerCaseLettersAmount) << " lowercase letters." << endl;
 }
 
 // Processes the selection made by the user, based on the options of the menu
