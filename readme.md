@@ -43,7 +43,58 @@ And in order to run that a.out file, we must execute on the terminal:
 ```terminal
 reinier@reinier % ./your_prefered_executable_file_name
 
+Welcome to Character Analysis Pro
 
+1. Simple & boring character analysis from a string object.
+2. Save some text to a file, so we can analyse it later.
+3. Quit the program.
+
+Type your selection please: 1
+
+Character Analysis Results:
+The string contains 2 digits, 3 uppercase letters & 33 lowercase letters.
+
+1. Simple & boring character analysis from a string object.
+2. Save some text to a file, so we can analyse it later.
+3. Quit the program.
+
+Type your selection please: 2
+Write a single line of text please: Oh yeah, this is way better
+
+1. Simple & boring character analysis from a string object.
+2. Add more text to our file, so we can analyse it later.
+3. Fun Y Cool Character Analysis of our text file.
+4. Quit the program.
+
+Type your selection please: 3
+
+Character Analysis Results:
+The file contains 0 digits, 1 uppercase letters & 20 lowercase letters.
+
+1. Simple & boring character analysis from a string object.
+2. Add more text to our file, so we can analyse it later.
+3. Fun Y Cool Character Analysis of our text file.
+4. Quit the program.
+
+Type your selection please: 2
+Write a single line of text please: And what about now? 305 forever man! Biden was not elected!!
+
+1. Simple & boring character analysis from a string object.
+2. Add more text to our file, so we can analyse it later.
+3. Fun Y Cool Character Analysis of our text file.
+4. Quit the program.
+
+Type your selection please: 3
+
+Character Analysis Results:
+The file contains 3 digits, 3 uppercase letters & 61 lowercase letters.
+
+1. Simple & boring character analysis from a string object.
+2. Add more text to our file, so we can analyse it later.
+3. Fun Y Cool Character Analysis of our text file.
+4. Quit the program.
+
+Type your selection please: 4
   
 Process finished with exit code 0
 reinier@reinier % 
