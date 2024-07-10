@@ -263,9 +263,9 @@ void analyseSimpleStringObject() {
 
 // Analyses a given file name and reports the amount of digits, as well as uppercase & lowercase letters
 void analyseOurTextFile(const string &fileName) {
-    long int upperCaseLettersAmount = 0; // The amount of uppercase letters in the string
-    long int lowerCaseLettersAmount = 0; // The amount of lowercase letters in the string
-    long int digitsAmount = 0; // The amount of digits in the string
+    long int upperCaseLettersAmount = 0; // The amount of uppercase letters in the text file
+    long int lowerCaseLettersAmount = 0; // The amount of lowercase letters in the text file
+    long int digitsAmount = 0; // The amount of digits in the text file
 
     // We get all the non-empty lines of text from the file
     const vector<string> textLinesFromFile = getLinesFromFile(fileName);
