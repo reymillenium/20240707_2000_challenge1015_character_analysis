@@ -7,7 +7,7 @@
  *                                                                                     *
  *   Purpose:                                                                          *
  *   Reads a .txt file and determines the amount of digits, uppercase and lowercase    *
- *   letters on it. It also dtermines the same from a constant string object.          *
+ *   letters on it. It also determines the same from a constant string object.         *
  *                                                                                     *
  *   More Details:                                                                     *
  *   https://github.com/reymillenium/20240707_2000_challenge1015_character_analysis    *
