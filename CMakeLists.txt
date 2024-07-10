@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.28)
+project(20240707_2000_challenge1015_character_analysis)
+
+set(CMAKE_CXX_STANDARD 17)
+
+add_executable(20240707_2000_challenge1015_character_analysis main.cpp)
