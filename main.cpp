@@ -108,7 +108,7 @@ int main() {
         showMenu(theFileExists);
 
         // Gets the selected menu option from the user
-        menuSelectedOption = getInteger("Type your selection please", 1, quittingOption);
+        menuSelectedOption = getInteger("Type your selection please", 1, quittingOption, true);
 
         // Processes the selection made by the user
         processSelection(menuSelectedOption, theFileExists, FILE_NAME);
@@ -288,9 +288,9 @@ void analyseOurTextFile(const string &fileName) {
 void displayResults(const long int upperCaseLettersAmount, const long int lowerCaseLettersAmount, const long int digitsAmount, const string &source) {
     cout << "" << endl;
     cout << "Character Analysis Results:" << endl;
-    cout << "The " << source << " contains " << humanizeUnsignedInteger(digitsAmount) << " digits, ";
-    cout << humanizeUnsignedInteger(upperCaseLettersAmount) << " uppercase letters & ";
-    cout << humanizeUnsignedInteger(lowerCaseLettersAmount) << " lowercase letters." << endl;
+    cout << "The " << source << " contains " << humanizeUnsignedInteger(digitsAmount) << " digit" << (digitsAmount == 1 ? "" : "s") << ", ";
+    cout << humanizeUnsignedInteger(upperCaseLettersAmount) << " uppercase letter" << (upperCaseLettersAmount == 1 ? "" : "s") << ", and ";
+    cout << humanizeUnsignedInteger(lowerCaseLettersAmount) << " lowercase letter" << (lowerCaseLettersAmount == 1 ? "" : "s") << "." << endl;
 }
 
 // Processes the selection made by the user, based on the options of the menu
