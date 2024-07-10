@@ -6,13 +6,15 @@
 
 ### Exercise Description:
 
-Write a program that reads the file’s contents and determines the following:
+Write a program that reads a file’s contents and determines the following:
 
 • The number of uppercase letters in the file
 
 • The number of lowercase letters in the file
 
 • The number of digits in the file
+
+It must also determine the same from a constant string object.
 
 ## Execution from the Terminal (Alternative way without an IDE):
 
