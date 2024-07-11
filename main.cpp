@@ -251,12 +251,9 @@ void analyseSimpleStringObject() {
     int digitsAmount = 0; // The amount of digits in the string
 
     // Then we determine each one of our counters
-    upperCaseLettersAmount = count_if(simpleTextToAnalyse.begin(), simpleTextToAnalyse.end(),
-                                      [](const unsigned char ch) { return isupper(ch); });
-    lowerCaseLettersAmount = count_if(simpleTextToAnalyse.begin(), simpleTextToAnalyse.end(),
-                                      [](const unsigned char ch) { return islower(ch); });
-    digitsAmount = count_if(simpleTextToAnalyse.begin(), simpleTextToAnalyse.end(),
-                            [](const unsigned char ch) { return isdigit(ch); });
+    upperCaseLettersAmount = count_if(simpleTextToAnalyse.begin(), simpleTextToAnalyse.end(), isupper);
+    lowerCaseLettersAmount = count_if(simpleTextToAnalyse.begin(), simpleTextToAnalyse.end(), islower);
+    digitsAmount = count_if(simpleTextToAnalyse.begin(), simpleTextToAnalyse.end(), isdigit);
 
     displayResults(upperCaseLettersAmount, lowerCaseLettersAmount, digitsAmount);
 }
@@ -272,12 +269,9 @@ void analyseOurTextFile(const string &fileName) {
 
     // And now we increment each one of our counters on each loop, based on each line of text
     for (string textLine: textLinesFromFile) {
-        upperCaseLettersAmount += count_if(textLine.begin(), textLine.end(),
-                                           [](const unsigned char ch) { return isupper(ch); });
-        lowerCaseLettersAmount += count_if(textLine.begin(), textLine.end(),
-                                           [](const unsigned char ch) { return islower(ch); });
-        digitsAmount += count_if(textLine.begin(), textLine.end(),
-                                 [](const unsigned char ch) { return isdigit(ch); });
+        upperCaseLettersAmount += count_if(textLine.begin(), textLine.end(), isupper);
+        lowerCaseLettersAmount += count_if(textLine.begin(), textLine.end(), islower);
+        digitsAmount += count_if(textLine.begin(), textLine.end(), isdigit);
     }
 
     displayResults(upperCaseLettersAmount, lowerCaseLettersAmount, digitsAmount, "file");
